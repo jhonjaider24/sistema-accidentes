@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { AccidentsService } from './accidents.service';
+import { CreateAccidentDto } from './create-accident.dto';
 
 @Controller('accidents')
 export class AccidentsController {
@@ -12,11 +13,7 @@ export class AccidentsController {
   }
 
   @Post()
-  createAccident(@Body() body: any) {
+  createAccident(@Body() body: CreateAccidentDto) {
     return this.accidentsService.createAccident(body);
-      
-    
-    
   }
-
 }
