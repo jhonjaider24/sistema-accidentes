@@ -12,7 +12,9 @@ export class AccidentsService {
   ) {}
 
   async getAccidents() {
-    return await this.accidentsRepository.find();
+    return await this.accidentsRepository.find({
+      order: { fecha: 'DESC', id: 'DESC' },
+    });
   }
 
   async createAccident(body: any) {

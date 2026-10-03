@@ -96,7 +96,7 @@ function App() {
   return (
     <div>
       <header className="encabezado">
-        <h1>Sistema de Gestión de Accidentes</h1>
+        <h1>Registro deAccidentes</h1>
       </header>
 
       <main>
