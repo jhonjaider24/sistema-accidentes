@@ -3,8 +3,11 @@ import type { Accident, NewAccident } from '../types/accident';
 
 const API_URL = 'http://localhost:3000/accidents';
 
-export const getAccidents = async (): Promise<Accident[]> => {
-  const response = await axios.get<Accident[]>(API_URL);
+export const getAccidents = async (busqueda?: string): Promise<Accident[]> => {
+  const response = await axios.get<Accident[]>(API_URL, {
+    // Axios arma la URL (?q=...) y codifica los caracteres especiales.
+    params: busqueda ? { q: busqueda } : undefined,
+  });
   return response.data;
 };
 

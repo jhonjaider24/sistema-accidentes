@@ -1,10 +1,10 @@
 /* Variables de diseño: si quieres cambiar un color después,
    lo cambias aquí y se actualiza en toda la app */
 :root {
-  --color-bg: #ffffff;
+  --color-bg: #817c7c7e;
   --color-text: #1f2328;
   --color-text-muted: #57606a;
-  --color-border: #d0d7de;
+  --color-border: #000000;
   --color-border-strong: #1f2328;
 
   --font-sans: system-ui, 'Segoe UI', Roboto, Arial, sans-serif;

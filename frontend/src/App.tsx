@@ -23,25 +23,30 @@ function App() {
   const [ubicacion, setUbicacion] = useState('');
   const [mensaje, setMensaje] = useState<Mensaje | null>(null);
 
-    // Estado de la lista
+  // Estado de la lista
   const [accidentes, setAccidentes] = useState<Accident[]>([]);
   const [cargando, setCargando] = useState(true); // solo true en la primera carga
   const [errorLista, setErrorLista] = useState<string | null>(null);
 
+  // Estado de la búsqueda
+  // textoBusqueda: lo que el usuario escribe en el campo (cambia con cada tecla).
+  // busqueda: el texto ya "aplicado" al pulsar Buscar (es el que dispara la consulta).
+  const [textoBusqueda, setTextoBusqueda] = useState('');
+  const [busqueda, setBusqueda] = useState('');
+
   // Contador que usamos como "señal" para volver a cargar la lista.
-  // Cada vez que cambia, el useEffect de abajo se ejecuta de nuevo.
   const [recarga, setRecarga] = useState(0);
 
-  // Carga la lista al abrir la página y cada vez que cambia `recarga`.
+  // Carga la lista al abrir la página y cuando cambia `recarga` o `busqueda`.
   useEffect(() => {
     let activo = true; // pasa a false si este efecto se limpia antes de terminar
 
     const cargarAccidentes = async () => {
       try {
-        const datos = await getAccidents();
+        const datos = await getAccidents(busqueda);
         if (!activo) return; // llegó una respuesta vieja: la ignoramos
         setAccidentes(datos);
-        setErrorLista(null); // si antes había error y ahora funcionó, lo limpiamos
+        setErrorLista(null);
       } catch (error) {
         console.error('Error al cargar los accidentes:', error);
         if (activo) setErrorLista('No se pudo cargar la lista de accidentes');
@@ -52,13 +57,22 @@ function App() {
 
     cargarAccidentes();
 
-    // Se ejecuta antes de la siguiente ejecución del efecto o al desmontar.
     return () => {
       activo = false;
     };
-  }, [recarga]);
+  }, [recarga, busqueda]);
 
-    const handleSubmit = async (event: React.FormEvent) => {
+  const handleBuscar = (event: React.FormEvent) => {
+    event.preventDefault();
+    setBusqueda(textoBusqueda.trim());
+  };
+
+  const handleLimpiarBusqueda = () => {
+    setTextoBusqueda('');
+    setBusqueda('');
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const datos = {
@@ -85,7 +99,6 @@ function App() {
       setUbicacion('');
 
       // Cambiar el contador dispara el useEffect y se vuelve a pedir la lista.
-      // (n => n + 1) usa el valor más reciente del estado.
       setRecarga((n) => n + 1);
     } catch (error) {
       console.error('Error al registrar el accidente:', error);
@@ -96,7 +109,7 @@ function App() {
   return (
     <div>
       <header className="encabezado">
-        <h1>Registro deAccidentes</h1>
+        <h1>Gestión de Accidentes</h1>
       </header>
 
       <main>
@@ -152,7 +165,32 @@ function App() {
         <section className="tarjeta">
           <h2>Accidentes registrados</h2>
 
-          {cargando && <p>Cargando accidentes...</p>}
+          <form className="busqueda" onSubmit={handleBuscar} role="search">
+            <div className="campo busqueda-campo">
+              <label htmlFor="busqueda">Buscar por título o ubicación</label>
+              <input
+                id="busqueda"
+                type="search"
+                value={textoBusqueda}
+                onChange={(event) => setTextoBusqueda(event.target.value)}
+              />
+            </div>
+
+            <div className="busqueda-acciones">
+              <button type="submit" className="boton">
+                Buscar
+              </button>
+              <button
+                type="button"
+                className="boton boton-secundario"
+                onClick={handleLimpiarBusqueda}
+              >
+                Limpiar
+              </button>
+            </div>
+          </form>
+
+          {cargando && <p>Cargando lista de accidentes...</p>}
 
           {!cargando && errorLista && (
             <p className="mensaje mensaje-error" role="alert">
@@ -161,7 +199,11 @@ function App() {
           )}
 
           {!cargando && !errorLista && accidentes.length === 0 && (
-            <p>No hay accidentes registrados.</p>
+            <p>
+              {busqueda
+                ? `No se encontraron accidentes registrados para "${busqueda}".`
+                : 'No hay accidentes registrados.'}
+            </p>
           )}
 
           {!cargando && !errorLista && accidentes.length > 0 && (

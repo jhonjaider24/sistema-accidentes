@@ -89,15 +89,15 @@
 }
 
 .mensaje-exito {
-  color: #1a4d2e;
+  color: #09e661;
   background: #f3f9f5;
-  border-color: #1a4d2e;
+  border-color: #0cd05b;
 }
 
 .mensaje-error {
-  color: #82071e;
+  color: #cc0529;
   background: #fdf4f5;
-  border-color: #82071e;
+  border-color: #cc0328;
 }
 
 /* ---------- Pantallas medianas y grandes ---------- */
@@ -111,7 +111,7 @@
   }
 }
 
-/* seccion */
+/* seccion 2 */
 
 /* ---------- Separación entre secciones ---------- */
 main {
@@ -149,4 +149,52 @@ main {
   margin: 8px 0 0;
   font-size: 0.875rem;
   color: var(--color-text-muted);
+}
+
+/* nueva seccion 3 */
+
+/* ---------- Búsqueda ---------- */
+.busqueda {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.busqueda-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+/* En móvil, los dos botones se reparten el ancho por igual */
+.busqueda-acciones .boton {
+  flex: 1;
+  width: auto;
+}
+
+/* Botón secundario: fondo blanco y borde, para diferenciarlo del principal */
+.boton-secundario {
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-strong);
+}
+
+.boton-secundario:hover {
+  background: #f6f8fa;
+}
+
+@media (min-width: 768px) {
+  /* En escritorio: campo a la izquierda, botones a la derecha, en una fila */
+  .busqueda {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .busqueda-campo {
+    flex: 1;
+  }
+
+  .busqueda-acciones .boton {
+    flex: none;
+  }
 }

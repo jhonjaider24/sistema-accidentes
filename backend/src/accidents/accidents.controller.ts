@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { AccidentsService } from './accidents.service';
 import { CreateAccidentDto } from './create-accident.dto';
@@ -8,8 +8,8 @@ export class AccidentsController {
   constructor(private readonly accidentsService: AccidentsService) {}
 
   @Get()
-  getAccidents() {
-    return this.accidentsService.getAccidents();
+  getAccidents(@Query('q') q?: string) {
+    return this.accidentsService.getAccidents(q);
   }
 
   @Post()
